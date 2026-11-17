@@ -1,0 +1,24 @@
+# Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Trained model artifacts
+*.ckpt
+*.h5
+*.hdf5
+*.joblib
+*.model
+*.onnx
+*.pkl
+*.pickle
+*.pb
+*.pt
+*.pth
+*.safetensors
+*.weights
+*.gguf
