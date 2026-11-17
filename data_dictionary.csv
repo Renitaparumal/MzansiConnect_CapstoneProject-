@@ -1,0 +1,29 @@
+file,column,description,type,example
+customers.csv,customer_id,Unique customer identifier,Text,CUST00001
+customers.csv,signup_date,Date customer joined (mixed formats),Date/Text,2022-05-14
+customers.csv,age,Customer age in years,Integer,34
+customers.csv,gender,Customer gender,Category,Female
+customers.csv,province,South African province of residence,Category,Gauteng
+customers.csv,city_type,"Urban, Peri-urban or Rural",Category,Urban
+customers.csv,plan_type,"Prepaid, Postpaid or Hybrid",Category,Prepaid
+customers.csv,contract_months,Contract length in months (0 = no contract),Integer,12
+customers.csv,device_type,Primary handset type,Category,Android
+customers.csv,payment_method,How the customer pays,Category,Mobile wallet
+customers.csv,income_band,Self-reported monthly income band,Category,R5k-R15k
+customers.csv,referral_source,How the customer was acquired,Category,Store
+customers.csv,cancellation_reason,Reason captured when the customer cancelled,Category,Price
+customers.csv,churned,TARGET: did the customer leave by 31 Jul 2026?,Yes/No,No
+usage_monthly.csv,customer_id,Foreign key to customers.customer_id,Text,CUST00001
+usage_monthly.csv,month,"Usage month (YYYY-MM), Jan to Jun 2026",Text,2026-03
+usage_monthly.csv,data_gb,Mobile data used in GB,Float,3.42
+usage_monthly.csv,voice_minutes,Outgoing voice minutes,Float,112.5
+usage_monthly.csv,sms_count,SMS sent,Integer,18
+usage_monthly.csv,revenue_zar,Revenue earned from customer that month (ZAR),Float,189.50
+usage_monthly.csv,dropped_call_complaint,1 if customer complained about dropped calls,Binary,0
+support_tickets.csv,ticket_id,Unique ticket identifier,Text,TKT000123
+support_tickets.csv,customer_id,Foreign key to customers.customer_id,Text,CUST00001
+support_tickets.csv,created_date,Date ticket was opened,Date,2026-02-11
+support_tickets.csv,category,Ticket category,Category,Billing
+support_tickets.csv,resolution_hours,Hours taken to resolve (blank if unresolved),Float,18.5
+support_tickets.csv,resolved,Whether ticket was resolved,Yes/No,Yes
+support_tickets.csv,satisfaction_score,"Post-resolution CSAT, 1 (poor) to 5 (excellent)",Integer,4
