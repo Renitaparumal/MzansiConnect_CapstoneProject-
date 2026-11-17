@@ -1,85 +1,146 @@
-# MzansiConnect_CapstoneProject-
+# MzansiConnect Customer Churn & Retention
 
-A collaboration project between five individuals from Shaper's Data Science Program.
+A five-person Shaper's Data Science Program capstone project exploring how a
+South African mobile network operator can understand customer churn and plan
+appropriate retention work.
 
-## Phase 2: Programming Foundations and Python Setup
+## Project overview
 
-The reusable CSV loaders are in `src/data_loading.py`, and non-mutating data-quality helpers are in `src/utils.py`. Raw CSV files belong in `data/raw/`; none are included in this repository. Generated/processed data should remain in `data/processed/` and must only be shared when authorized.
+The project brief describes an estimated churn rate of approximately 21%. The
+goal is to build a reproducible workflow for auditing customer data, exploring
+churn drivers, evaluating churn classification and revenue regression, and
+communicating responsible, actionable findings. The project plan sets a target
+of capturing at least 50% of churners in the highest-risk 20% of customers.
+This is a target, not a measured result.
 
-The pinned environment was created and tested with Python 3.14.2. Create and activate an isolated environment, install the pinned dependencies, and run the test suite:
+The Phase 1 materials describe the data as synthetic. The raw CSVs and
+authoritative data dictionary are not included in this repository, so no
+dataset-level findings, model scores, or cleaning outcomes are claimed here.
+See [the project plan](docs/project_plan.md), [the governance note](docs/data_governance_note.md),
+and [the data quality checklist](docs/data_quality_checklist.md).
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m pytest
+## Datasets
+
+The project expects the following project-provided CSV tables in `data/raw/`.
+They are not currently present in the repository.
+
+| File | Expected contents |
+|---|---|
+| `customers.csv` | Customer profile and account fields, such as customer ID, demographics, plan, payment method, spend, and the churn target where provided. |
+| `usage_monthly.csv` | Monthly customer usage, including data and voice measures. |
+| `support_tickets.csv` | Support interactions, including ticket category and resolution timing. |
+
+These descriptions and example fields are drawn from the Phase 1 materials;
+verify exact columns, definitions, and sources against the authoritative data
+dictionary before analysis. Keep authorized raw files in `data/raw/`, preserve
+them unchanged, and do not commit personal or otherwise restricted data.
+
+## Repository structure
+
+```text
+.
+├── .github/workflows/tests.yml
+├── data/
+│   ├── processed/
+│   └── raw/
+├── docs/
+│   ├── data_governance_note.md
+│   ├── data_quality_checklist.md
+│   └── project_plan.md
+├── src/
+│   ├── data_loading.py
+│   └── utils.py
+├── tests/
+│   ├── test_data_loading.py
+│   └── test_utils.py
+├── phase2_data_loading.py
+├── phase2_utils.py
+├── test_phase2_utils.py
+└── requirements.txt
 ```
 
-On Windows, activate with `.venv\Scripts\activate`.
+`src/` contains the reusable project loaders and quality helpers. The
+`phase2_*.py` files and root-level `test_phase2_utils.py` are a separate Phase 2
+implementation retained for the assignment.
 
-A separate Phase 2 implementation is retained in `phase2_data_loading.py` and `phase2_utils.py`, with its tests in `test_phase2_utils.py`. The reusable project modules remain under `src/`.
+## Setup and tests
 
-### Phase 2 checkpoint questions
+Tested with Python 3.14.2. From a fresh clone:
 
-- **Why is a virtual environment important when sharing a project?** It isolates the project's pinned dependencies from other Python projects and makes setup and test results more reproducible for collaborators.
-- **What is the difference between returning a DataFrame and modifying it in place? Which is safer?** Returning a new DataFrame leaves the caller's input unchanged, making data flow easier to test and reason about. In-place changes can affect other code holding the same object, so returning a copy is safer for reusable helpers unless mutation is explicitly part of the API.
+```bash
+git clone https://github.com/Renitaparumal/MzansiConnect_CapstoneProject-.git
+cd MzansiConnect_CapstoneProject-
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pytest -v
+```
 
-## Phase 3: Version Control with Git and GitHub
+On Windows, activate the environment with `.venv\Scripts\activate`. Dependency
+versions are pinned in [requirements.txt](requirements.txt). The current test
+suite result is **25 passed**; GitHub Actions also runs the test suite on pushes
+and pull requests.
 
-The project is maintained in the public [MzansiConnect_CapstoneProject- repository](https://github.com/Renitaparumal/MzansiConnect_CapstoneProject-). Work uses focused feature branches and small commits. Pull requests should explain changes and provide a place for review and automated checks before merging. The repository's `.gitignore` excludes Python virtual environments, Jupyter checkpoints, and common trained-model artifacts; data should only be committed when it is permitted to share.
+## Data preparation and quality decisions
 
-### Git checkpoint questions
+The implemented helpers support reporting missingness, standardizing selected
+text fields, flagging IQR outliers, removing duplicates, and dropping rows
+missing required values. They return results without changing the caller's
+input, and log relevant row counts. Decisions such as imputation, sentinel
+interpretation, duplicate removal, or exclusions must be based on inspection
+of the actual data and documented before use. Since the CSVs are absent, this
+repository does not claim that a cleaning pass has been completed.
 
-- **What is the difference between `git merge` and `git rebase`?** `git merge` joins histories by creating a merge commit (when needed), preserving the branches' original commits. `git rebase` replays commits onto a new base, creating new commit IDs and a linear history. Avoid rebasing commits that others already depend on.
-- **Why do teams use pull requests instead of pushing directly to the main branch?** Pull requests provide a place to review changes, discuss tradeoffs, run automated checks, and catch issues before integration. They also document why a change was made and help protect the shared main branch.
+The Phase 1 checklist covers completeness, validity, consistency, uniqueness,
+timeliness, and accuracy. Its field inventory is provisional until it can be
+reconciled with the authoritative dictionary.
+
+## Team responsibilities
+
+The project is a five-person collaboration. The checked-in materials do not
+reliably attribute completed work to individual members, so individual names
+and contribution claims are intentionally not inferred from commit history.
+The team should record each member's actual ownership and contributions here
+as work is assigned. Project work areas are:
+
+| Work area | Responsibilities |
+|---|---|
+| Data and governance | Confirm data provenance, dictionary, permitted use, and privacy controls. |
+| Data preparation | Audit quality dimensions, document cleaning decisions, and maintain reproducible loaders. |
+| Analysis and modelling | Explore churn drivers and evaluate classification/regression without leakage. |
+| Validation and delivery | Review model performance/fairness and prepare evidence-based reports or tools. |
+| Repository coordination | Maintain tests, documentation, review workflow, and release evidence. |
+
+## Current status and evidence
+
+Phase 1 planning and governance documents and Phase 2 Python utilities/tests are
+present. The repository currently has no raw datasets, data dictionary, or
+reported analytical findings. Conclusions and retention recommendations
+therefore remain pending actual data analysis and model validation.
+
+## Git workflow
+
+Use focused feature branches and pull requests with a summary, rationale,
+affected files, and test results. The project README also records the
+intentional merge-conflict practice and its resolution.
+
+### Checkpoint questions
+
+- **Why use a virtual environment?** It isolates pinned project dependencies
+  from other Python projects and makes setup more reproducible.
+- **Why return a DataFrame instead of modifying it in place?** Returning a new
+  object avoids unexpected changes to data held by callers and makes helpers
+  easier to test.
+- **What is the difference between merge and rebase?** Merge joins histories
+  while preserving branch commits; rebase replays commits on a new base and
+  changes their IDs. Avoid rebasing commits others depend on.
+- **Why use pull requests?** They enable review, discussion, automated checks,
+  and a record of why changes were integrated.
 
 ### Merge conflict practice
 
-Two practice branches changed the same README sentence differently. Merging them produced a conflict in that line. I resolved it by comparing both versions, keeping the final wording that accurately describes the repository workflow, removing Git's conflict markers, and completing the merge commit. The resulting README retains the checkpoint answers and this resolution note.
-
-## Design choices for `src/data_loading.py` and `src/utils.py`
-
-### Guiding principles
-
-1. **One job per function.** Every helper does exactly one thing and its name says what that is. If a name needed "and", the function was split.
-2. **Return, never mutate.** Every function returns a new object; the caller keeps the original for auditing and rollback. This also makes each function trivially unit-testable on a small hand-made DataFrame.
-3. **Explicit inputs, no hidden globals.** All data enters as arguments. No function reaches into a global DataFrame, so behaviour is predictable and reproducible.
-4. **Flag, don't delete.** Cleaning helpers *report* or *mark* problems (missingness, outliers, duplicates, sentinels) and leave the decision to the cleaning notebook, where it is logged with a justification. This keeps the Phase 4 cleaning log honest and reviewable.
-5. **Log, don't print.** Loaders and helpers use the `logging` module so row counts appear in a timestamped, levelled stream that can be redirected to a file. `print` disappears the moment you run headless.
-
----
-
-### `src/data_loading.py`
-
-| Function | What it does | Why it exists |
-|---|---|---|
-| `_read_csv` | Reads a file from `data/raw/`, raises a clear error if missing, logs row/column counts. | One choke-point for all reads means one place to enforce "never edit raw files" and one place that logs provenance. |
-| `load_customers` / `load_usage` / `load_tickets` / `load_dictionary` | Thin, named wrappers. | Callers read as English (`load_customers()`), and a future schema change touches one function, not every notebook. |
-
-**Path handling:** paths are resolved relative to the module file (`Path(__file__).resolve().parent.parent`), so the loaders work no matter which directory you launch Jupyter or pytest from. Hard-coded relative paths break as soon as the working directory changes.
-
-**Why a `FileNotFoundError` with a helpful message:** a missing raw file is an environment problem, not a data problem. Failing fast with "place the CSVs in data/raw/" saves the grader ten minutes of guessing.
-
----
-
-### `src/utils.py`
-
-| Function | Single job | Data issue it guards against (from the brief) | Trade-off accepted |
-|---|---|---|---|
-| `missing_values_report` | Count and rank missingness per column. | "Missing values in several columns, and the *reason* for missingness may matter." | Reports only — no imputation. Imputation is a modelling decision that belongs in Phase 4 with a written justification, not in a helper. |
-| `standardise_text` | One text-cleanup pipeline; returns a copy. | Inconsistent spellings/capitalisation: `western cape`, `WC`, `GAUTENG `, `male`/`MALE`/`M` in `customers.csv`. | Optional `title_case` because some columns (e.g. `gender`) are better left lower-case; the caller chooses. Non-strings become `NaN` (via `astype("string")`) rather than raising, so mixed columns don't crash a notebook. |
-| `flag_iqr_outliers` | Boolean mask using Tukey's fences. | "Impossible or suspicious values (ages, negative or extreme usage)." | Flags rather than removes, because a very large data-usage value can be a legitimate heavy user — the brief explicitly warns to check surrounding months before deleting. `k=3.0` is available for "extreme" outliers. Raises `TypeError` on non-numeric input so mistakes surface early. NaNs return `False` (not-outlier) to keep the mask usable in filters. |
-| `duplicate_report` | Count exact duplicate rows, optionally on a column subset. | "Exact duplicate customer rows." in `customers.csv`. | Counts only. Dropping duplicates is deferred to Phase 4 because you must first confirm they are true duplicates (same `customer_id`) and not coincidental matches. The `subset` argument lets you check duplicates on `customer_id` alone later. |
-| `to_numeric_safe` | Coerce to numeric, un-parseable → `NaN`. | Placeholder/mixed values that break arithmetic. | Deliberately does **not** strip sentinels — that is a separate, explicit step (`replace_sentinels`) so the two decisions are logged independently. |
-| `replace_sentinels` | Map known placeholders (default `-999`, `999999`) to `NaN`. | "Treat placeholder values such as -999 correctly" in `usage_monthly.csv`. | Defaults are a starting point, not gospel; the cleaning notebook passes the sentinels it actually finds in `value_counts()`. Kept separate from coercion so "we saw a sentinel" and "it was text" are two distinct, auditable facts. |
-
-**Why `missing_values_report` returns `pct_missing` rounded to 2 dp:** percentages are for humans reading a report; keeping full precision would clutter the Phase 4 cleaning log. The raw counts are kept alongside for exactness.
-
-**Why `standardise_text` collapses internal whitespace:** `"Western  Cape"` (double space) and `"Western Cape"` should map to the same category. Without collapsing, `value_counts()` would show them as separate groups and hide the problem.
-
-### Testing approach (`tests/test_utils.py`)
-
-- **Small, hand-made DataFrames.** Each test builds the smallest input that exercises the behaviour, so failures point at the function, not at a 6,000-row fixture.
-- **One behaviour per test.** Six functions, nine tests — enough to cover the happy path, the empty/degenerate case (`missing_values_report` on an empty frame), the error path (`flag_iqr_outliers` on text), and the "don't mutate the input" guarantee.
-- **Edge cases that mirror the real data:** `None` in text, `np.nan` in numerics, `-999` and `999999` sentinels, and a clear IQR outlier (`1000` against `10–50`).
-- **Deterministic.** No random data, no I/O — the suite runs in milliseconds and never depends on the CSVs being present.
+Two practice branches changed the same README sentence differently. Merging
+them produced a conflict. It was resolved by comparing both versions, keeping
+the wording that accurately described the workflow, removing conflict markers,
+and completing the merge commit.
