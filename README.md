@@ -6,6 +6,8 @@ A collaboration project between five individuals from Shaper's Data Science Prog
 
 The project is maintained in the public [MzansiConnect_CapstoneProject- repository](https://github.com/Renitaparumal/MzansiConnect_CapstoneProject-). Work uses focused feature branches and small commits. Pull requests should explain changes and provide a place for review and automated checks before merging. The repository's `.gitignore` excludes Python virtual environments, Jupyter checkpoints, and common trained-model artifacts; data should only be committed when it is permitted to share.
 
+See the [Git workflow guide](docs/git_workflow.md) for branch, commit, pull-request, and release conventions.
+
 ### Git checkpoint questions
 
 - **What is the difference between `git merge` and `git rebase`?** `git merge` joins histories by creating a merge commit (when needed), preserving the branches' original commits. `git rebase` replays commits onto a new base, creating new commit IDs and a linear history. Avoid rebasing commits that others already depend on.
