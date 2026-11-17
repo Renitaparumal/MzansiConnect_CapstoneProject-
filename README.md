@@ -2,6 +2,26 @@
 
 A collaboration project between five individuals from Shaper's Data Science Program.
 
+## Phase 2: Programming Foundations and Python Setup
+
+The reusable CSV loaders are in `src/data_loading.py`, and non-mutating data-quality helpers are in `src/utils.py`. Raw CSV files belong in `data/raw/`; none are included in this repository. Generated/processed data should remain in `data/processed/` and must only be shared when authorized.
+
+The pinned environment was created and tested with Python 3.14.2. Create and activate an isolated environment, install the pinned dependencies, and run the test suite:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m pytest
+```
+
+On Windows, activate with `.venv\Scripts\activate`.
+
+### Phase 2 checkpoint questions
+
+- **Why is a virtual environment important when sharing a project?** It isolates the project's pinned dependencies from other Python projects and makes setup and test results more reproducible for collaborators.
+- **What is the difference between returning a DataFrame and modifying it in place? Which is safer?** Returning a new DataFrame leaves the caller's input unchanged, making data flow easier to test and reason about. In-place changes can affect other code holding the same object, so returning a copy is safer for reusable helpers unless mutation is explicitly part of the API.
+
 ## Phase 3: Version Control with Git and GitHub
 
 The project is maintained in the public [MzansiConnect_CapstoneProject- repository](https://github.com/Renitaparumal/MzansiConnect_CapstoneProject-). Work uses focused feature branches and small commits. Pull requests should explain changes and provide a place for review and automated checks before merging. The repository's `.gitignore` excludes Python virtual environments, Jupyter checkpoints, and common trained-model artifacts; data should only be committed when it is permitted to share.
