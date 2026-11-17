@@ -13,33 +13,35 @@ communicating responsible, actionable findings. The project plan sets a target
 of capturing at least 50% of churners in the highest-risk 20% of customers.
 This is a target, not a measured result.
 
-The Phase 1 materials describe the data as synthetic. The raw CSVs and
-authoritative data dictionary are not included in this repository, so no
-dataset-level findings, model scores, or cleaning outcomes are claimed here.
+The Phase 1 materials describe the data as synthetic. The schema
+[data dictionary](data_dictionary.csv) is included, but the three source CSVs
+are not. Therefore, no dataset-level findings, model scores, or cleaning
+outcomes are claimed here.
 See [the project plan](docs/project_plan.md), [the governance note](docs/data_governance_note.md),
 and [the data quality checklist](docs/data_quality_checklist.md).
 
 ## Datasets
 
-The project expects the following project-provided CSV tables in `data/raw/`.
-They are not currently present in the repository.
+The data dictionary describes the following project-provided CSV tables for
+`data/raw/`. The source files are not currently present in the repository.
 
 | File | Expected contents |
 |---|---|
-| `customers.csv` | Customer profile and account fields, such as customer ID, demographics, plan, payment method, spend, and the churn target where provided. |
-| `usage_monthly.csv` | Monthly customer usage, including data and voice measures. |
-| `support_tickets.csv` | Support interactions, including ticket category and resolution timing. |
+| `customers.csv` | Customer identifiers, profile/account fields, and a churn target. |
+| `usage_monthly.csv` | Monthly data, voice, SMS, revenue, and dropped-call complaint fields. |
+| `support_tickets.csv` | Ticket identifiers, category, resolution, and post-resolution satisfaction fields. |
 
-These descriptions and example fields are drawn from the Phase 1 materials;
-verify exact columns, definitions, and sources against the authoritative data
-dictionary before analysis. Keep authorized raw files in `data/raw/`, preserve
-them unchanged, and do not commit personal or otherwise restricted data.
+See the dictionary for all fields and definitions. Source-system provenance and
+actual values still require confirmation with the data owner. Keep authorized
+raw files in `data/raw/`, preserve them unchanged, and do not commit personal
+or otherwise restricted data.
 
 ## Repository structure
 
 ```text
 .
 ├── .github/workflows/tests.yml
+├── data_dictionary.csv
 ├── data/
 │   ├── processed/
 │   └── raw/
@@ -93,8 +95,10 @@ of the actual data and documented before use. Since the CSVs are absent, this
 repository does not claim that a cleaning pass has been completed.
 
 The Phase 1 checklist covers completeness, validity, consistency, uniqueness,
-timeliness, and accuracy. Its field inventory is provisional until it can be
-reconciled with the authoritative dictionary.
+timeliness, and accuracy. Its field inventory classifies all 28 columns in the
+checked-in data dictionary by analytical type, structure, and privacy handling.
+The source CSVs are required to validate actual values and complete data
+quality checks.
 
 ## Team responsibilities
 
@@ -114,10 +118,11 @@ as work is assigned. Project work areas are:
 
 ## Current status and evidence
 
-Phase 1 planning and governance documents and Phase 2 Python utilities/tests are
-present. The repository currently has no raw datasets, data dictionary, or
-reported analytical findings. Conclusions and retention recommendations
-therefore remain pending actual data analysis and model validation.
+Phase 1 planning, governance, and quality documentation and Phase 2 Python
+utilities/tests are present. The data dictionary is checked in, but the raw
+CSV datasets and reported analytical findings are not. Conclusions and
+retention recommendations therefore remain pending actual data analysis and
+model validation.
 
 ## Git workflow
 
@@ -127,6 +132,17 @@ intentional merge-conflict practice and its resolution.
 
 ### Checkpoint questions
 
+- **Which columns should be removed or masked before external sharing, and
+  why?** Remove `customer_id` and `ticket_id`, or replace them with
+  project-specific tokens whose key is kept separately. Generalize or
+  suppress `age`, `signup_date`, `province`, and `city_type`, especially in
+  combination; review `income_band`, `gender`, account, usage, and support
+  fields for rare groups. Share only necessary fields. Hashing or tokenization
+  reduces direct identification but does not guarantee anonymization.
+- **Is churn classification or regression?** The primary framing is binary
+  classification (churn or retained during a defined window). A regression
+  framing predicts a continuous outcome such as next-quarter revenue or time
+  until cancellation.
 - **Why use a virtual environment?** It isolates pinned project dependencies
   from other Python projects and makes setup more reproducible.
 - **Why return a DataFrame instead of modifying it in place?** Returning a new

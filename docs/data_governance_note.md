@@ -2,20 +2,22 @@
 
 ## Purpose and scope
 
-This note sets minimum safeguards for the MzansiConnect churn and retention capstone. Records linkable to a person—including demographics, location, account information, telecommunications usage, and support interactions—must be handled as personal information under South Africa’s Protection of Personal Information Act (POPIA). The Phase 1 submission describes the dataset as synthetic; safeguards remain important if real or linkable data is introduced. This is an operational guide, not legal advice. The responsible organization should confirm its lawful basis, notices, and obligations before processing personal information.
+The Phase 1 brief describes the dataset as synthetic, but source CSVs have not been supplied. Records relating to an identified or identifiable person are personal information under South Africa's Protection of Personal Information Act (POPIA). Confirm lawful basis, notices, and obligations before processing real or linkable data; this note is operational guidance, not legal advice.
 
-## Collection, use, and access
+## Data lifecycle, collection, storage, and access
 
-Collect only fields needed for the stated analyses, and document each dataset’s source, purpose, permitted users, and study period. Keep raw files read-only in restricted `data/raw/`; use minimized, access-controlled working copies. Never put personal records or confidential exports in public Git history, notebooks, logs, or reports. Limit access to authorized members and use approved storage and transfer methods.
+Source systems are unconfirmed. Customer/account fields may come from a CRM or billing system, usage and dropped-call complaints from network/service systems, and tickets or satisfaction scores from a call-centre platform. Confirm provenance, purpose, period, and permitted use with the data owner.
 
-## External contractor checkpoint
+Collect only needed fields. Preserve authorized originals read-only in restricted `data/raw/`; store minimized working copies and the project database in access-controlled `data/processed/`. Use approved encrypted storage/transfer, protect credentials separately, and keep personal records out of Git, notebooks, logs, and public reports. The data owner approves access; authorized data scientists handle row-level records; stakeholders receive minimized aggregates. Log access and material transformations.
 
-Before sharing with an external contractor, remove direct identifiers such as `customer_id` or replace them with a project-specific token; keep the re-identification key separate. Generalize quasi-identifiers: band exact age, reduce dates to month or remove them, and coarsen province and `city_type` if combinations could identify someone. Check gender, plan, payment, financial, usage, and support fields for rare groups; suppress or aggregate them where needed. Share only necessary fields under documented purpose, access, retention, and deletion terms. Hashing is pseudonymization, not guaranteed anonymization, when other fields can be linked.
+## Personal information and external sharing
 
-## Retention, quality, and lifecycle
+Direct identifiers include `customer_id` and `ticket_id`, including foreign-key copies. Quasi-identifiers include `age`, `signup_date`, `province`, `city_type`, and combinations of demographic, plan, device, income, and referral fields. Payment, revenue, usage, complaint, ticket, cancellation, resolution, and satisfaction fields reveal account or behavioral details when linked to a person; `churned` is also a personal account outcome. Restrict these fields when linkable.
 
-Retain identifiable and transaction-level records only for an approved period tied to the project purpose and organizational requirements. The submission proposes up to 36 months after account termination for granular usage and support history; this is not a confirmed legal rule and must be approved before adoption. Then securely delete or irreversibly anonymize records, including backups and contractor copies, subject to applicable retention obligations.
+Before contractor sharing, remove identifiers or use project-specific tokens; keep any re-identification key separately. Hashing/tokenization is pseudonymization, not guaranteed anonymization. Band age/income, reduce date precision, coarsen location, and aggregate rare categories. Exclude unnecessary fields, especially post-outcome `cancellation_reason` and the target. Assess combinations for re-identification risk and document purpose, access, retention, and deletion terms.
 
-## Ethical use and incident readiness
+## Retention and ethical use
 
-Review model performance and potential disparate impact across age, income, and regional groups where appropriate. False positives may prompt unwanted contact; false negatives may leave customers with service issues without support. Use predictions to guide human review, not as the sole basis for adverse treatment, and provide a way to correct inaccurate data. For suspected privacy incidents, restrict access and promptly notify the designated privacy contact to assess response and notification obligations.
+Retain identifiable or transaction-level records only as long as needed for the purpose and applicable requirements. The Phase 1 submission proposes up to 36 months after account termination for granular usage/support history; this is not a confirmed POPIA rule and requires data-owner approval. Then securely delete or irreversibly anonymize records, backups, and contractor copies, subject to retention obligations.
+
+A false positive may prompt unwanted contact; a false negative may leave a customer with service problems without support. Review performance across age, income, and regional groups. Use predictions to inform human review, not as the sole basis for adverse decisions, and allow correction of inaccurate data. For suspected incidents, restrict access and notify the privacy contact promptly.

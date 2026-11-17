@@ -17,36 +17,36 @@ Run this checklist on each authorized source table before transformation or mode
 
 The inventory below covers every field in the repository's `data_dictionary.csv`. That dictionary describes the schema but the source CSVs are not present, so actual values, completeness, table grain, and definitions still need to be verified against the data. The dictionary describes `usage_monthly.csv` as January–June 2026 and `churned` as whether the customer left by 31 July 2026; confirm these windows against the supplied data before analysis.
 
-| Source table | Field | Dictionary type / analytical interpretation | Privacy classification and handling |
+| Source table | Field | Data type classification | Structure | Privacy classification and handling |
 |---|---|---|---|
-| `customers.csv` | `customer_id` | Text; identifier/key | Direct identifier; exclude from shared extracts or use a project-specific token, with any re-identification key held separately. |
-| `customers.csv` | `signup_date` | Date or text; date with mixed formats | Personal/quasi-identifier; parse only when unambiguous, and reduce precision or remove for sharing if unnecessary. |
-| `customers.csv` | `age` | Integer; numeric | Personal/quasi-identifier; use broad age bands in shared data and assess group-level model performance. |
-| `customers.csv` | `gender` | Category; nominal | Personal demographic information; restrict to the authorized purpose and assess fairness implications. |
-| `customers.csv` | `province` | Category; nominal | Personal/quasi-identifier; coarsen or aggregate when linkage or small groups are possible. |
-| `customers.csv` | `city_type` | Category; nominal | Location-related quasi-identifier; generalize or suppress where combinations create linkage risk. |
-| `customers.csv` | `plan_type` | Category; nominal | Account information; share only when needed and review combinations for small groups. |
-| `customers.csv` | `contract_months` | Integer; numeric/discrete | Contract/account information; minimize and aggregate or band for sharing when exact duration is unnecessary. |
-| `customers.csv` | `device_type` | Category; nominal | Device/account information; minimize and review combinations for small groups. |
-| `customers.csv` | `payment_method` | Category; nominal | Financial/account-related information; minimize and restrict access. |
-| `customers.csv` | `income_band` | Category; ordinal | Financial/demographic information; minimize, aggregate small groups, and assess fairness. |
-| `customers.csv` | `referral_source` | Category; nominal | Acquisition/behavioral information; share only when needed and group rare values. |
-| `customers.csv` | `cancellation_reason` | Category; nominal | Post-cancellation account information; restrict access and exclude from churn prediction because it is recorded at cancellation and leaks the outcome. |
-| `customers.csv` | `churned` | Yes/No; binary target | Account outcome; restrict to the authorized purpose, protect as a label, and exclude from predictors. |
-| `usage_monthly.csv` | `customer_id` | Text; foreign key/identifier | Direct identifier; tokenize consistently for authorized joins, then exclude from shared extracts unless essential. |
-| `usage_monthly.csv` | `month` | Text; year-month period | Behavioral timeline; retain only the necessary period and review linkage risk before sharing. |
-| `usage_monthly.csv` | `data_gb` | Float; numeric/continuous | Telecommunications usage information; minimize and aggregate where appropriate. |
-| `usage_monthly.csv` | `voice_minutes` | Float; numeric/continuous | Telecommunications usage information; minimize and aggregate where appropriate. |
-| `usage_monthly.csv` | `sms_count` | Integer; numeric/count | Telecommunications usage information; minimize and aggregate where appropriate. |
-| `usage_monthly.csv` | `revenue_zar` | Float; numeric/continuous (ZAR) | Customer revenue/account information; aggregate or band for sharing when precise values are unnecessary. |
-| `usage_monthly.csv` | `dropped_call_complaint` | Binary; indicator | Service experience/complaint information; restrict to the authorized purpose and aggregate where possible. |
-| `support_tickets.csv` | `ticket_id` | Text; identifier/key | Record identifier that may enable linkage; remove or replace with a project-specific token before sharing. |
-| `support_tickets.csv` | `customer_id` | Text; foreign key/identifier | Direct identifier; tokenize consistently for authorized joins, then exclude from shared extracts unless essential. |
-| `support_tickets.csv` | `created_date` | Date | Support-interaction timeline; reduce precision or remove if unnecessary for the analysis or sharing. |
-| `support_tickets.csv` | `category` | Category; nominal | Support-interaction information; review rare categories and group small counts. |
-| `support_tickets.csv` | `resolution_hours` | Float; numeric/continuous | Support-interaction information; the dictionary says blank when unresolved, so distinguish unresolved tickets from missing data. Aggregate if sharing. |
-| `support_tickets.csv` | `resolved` | Yes/No; binary | Support-interaction outcome; restrict to the authorized purpose and use only if available by the prediction cutoff. |
-| `support_tickets.csv` | `satisfaction_score` | Integer; ordinal (1–5) | Support-interaction information; dictionary describes post-resolution CSAT, so exclude from prediction if it would not be available at the prediction time. |
+| `customers.csv` | `customer_id` | Identifier (text key) | Structured (tabular) | Direct identifier; exclude from shared extracts or use a project-specific token, with any re-identification key held separately. |
+| `customers.csv` | `signup_date` | Date/time (mixed date/text representation) | Structured (tabular) | Personal/quasi-identifier; parse only when unambiguous, and reduce precision or remove for sharing if unnecessary. |
+| `customers.csv` | `age` | Discrete (integer years) | Structured (tabular) | Personal/quasi-identifier; use broad age bands in shared data and assess group-level model performance. |
+| `customers.csv` | `gender` | Nominal (category) | Structured (tabular) | Personal demographic information; restrict to the authorized purpose and assess fairness implications. |
+| `customers.csv` | `province` | Nominal (category) | Structured (tabular) | Personal/quasi-identifier; coarsen or aggregate when linkage or small groups are possible. |
+| `customers.csv` | `city_type` | Nominal (category) | Structured (tabular) | Location-related quasi-identifier; generalize or suppress where combinations create linkage risk. |
+| `customers.csv` | `plan_type` | Nominal (category) | Structured (tabular) | Account information; share only when needed and review combinations for small groups. |
+| `customers.csv` | `contract_months` | Discrete (integer months) | Structured (tabular) | Contract/account information; minimize and aggregate or band for sharing when exact duration is unnecessary. |
+| `customers.csv` | `device_type` | Nominal (category) | Structured (tabular) | Device/account information; minimize and review combinations for small groups. |
+| `customers.csv` | `payment_method` | Nominal (category) | Structured (tabular) | Financial/account-related information; minimize and restrict access. |
+| `customers.csv` | `income_band` | Ordinal (category) | Structured (tabular) | Financial/demographic information; minimize, aggregate small groups, and assess fairness. |
+| `customers.csv` | `referral_source` | Nominal (category) | Structured (tabular) | Acquisition/behavioral information; share only when needed and group rare values. |
+| `customers.csv` | `cancellation_reason` | Nominal (category) | Structured (tabular) | Post-cancellation account information; restrict access and exclude from churn prediction because it is recorded at cancellation and leaks the outcome. |
+| `customers.csv` | `churned` | Nominal (binary Yes/No target) | Structured (tabular) | Account outcome; restrict to the authorized purpose, protect as a label, and exclude from predictors. |
+| `usage_monthly.csv` | `customer_id` | Identifier (text foreign key) | Structured (tabular) | Direct identifier; tokenize consistently for authorized joins, then exclude from shared extracts unless essential. |
+| `usage_monthly.csv` | `month` | Date/time (year-month period) | Structured (tabular) | Behavioral timeline; retain only the necessary period and review linkage risk before sharing. |
+| `usage_monthly.csv` | `data_gb` | Continuous (float, GB) | Structured (tabular) | Telecommunications usage information; minimize and aggregate where appropriate. |
+| `usage_monthly.csv` | `voice_minutes` | Continuous (float, minutes) | Structured (tabular) | Telecommunications usage information; minimize and aggregate where appropriate. |
+| `usage_monthly.csv` | `sms_count` | Discrete (integer count) | Structured (tabular) | Telecommunications usage information; minimize and aggregate where appropriate. |
+| `usage_monthly.csv` | `revenue_zar` | Continuous (float, ZAR) | Structured (tabular) | Customer revenue/account information; aggregate or band for sharing when precise values are unnecessary. |
+| `usage_monthly.csv` | `dropped_call_complaint` | Nominal (binary indicator) | Structured (tabular) | Service experience/complaint information; restrict to the authorized purpose and aggregate where possible. |
+| `support_tickets.csv` | `ticket_id` | Identifier (text key) | Structured (tabular) | Record identifier that may enable linkage; remove or replace with a project-specific token before sharing. |
+| `support_tickets.csv` | `customer_id` | Identifier (text foreign key) | Structured (tabular) | Direct identifier; tokenize consistently for authorized joins, then exclude from shared extracts unless essential. |
+| `support_tickets.csv` | `created_date` | Date/time (date) | Structured (tabular) | Support-interaction timeline; reduce precision or remove if unnecessary for the analysis or sharing. |
+| `support_tickets.csv` | `category` | Nominal (category) | Structured (tabular) | Support-interaction information; review rare categories and group small counts. |
+| `support_tickets.csv` | `resolution_hours` | Continuous (float, hours) | Structured (tabular) | Support-interaction information; the dictionary says blank when unresolved, so distinguish unresolved tickets from missing data. Aggregate if sharing. |
+| `support_tickets.csv` | `resolved` | Nominal (binary Yes/No) | Structured (tabular) | Support-interaction outcome; restrict to the authorized purpose and use only if available by the prediction cutoff. |
+| `support_tickets.csv` | `satisfaction_score` | Ordinal (integer scale, 1–5) | Structured (tabular) | Support-interaction information; dictionary describes post-resolution CSAT, so exclude from prediction if it would not be available at the prediction time. |
 
 ## Sign-off before analysis
 
