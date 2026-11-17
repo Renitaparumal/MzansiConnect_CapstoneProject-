@@ -4,7 +4,7 @@ A collaboration project between five individuals from Shaper's Data Science Prog
 
 ## Phase 3: Version Control with Git and GitHub
 
-The project is maintained in the public [MzansiConnect_CapstoneProject- repository](https://github.com/Renitaparumal/MzansiConnect_CapstoneProject-). Changes should be developed on descriptive feature branches, committed in small units, and proposed through pull requests. The repository's `.gitignore` excludes Python virtual environments, Jupyter checkpoints, and common trained-model artifacts; data should only be committed when it is permitted to share.
+The project is maintained in the public [MzansiConnect_CapstoneProject- repository](https://github.com/Renitaparumal/MzansiConnect_CapstoneProject-). Feature branches keep work isolated; pull requests should explain the change and provide a place for review and automated checks before merging. The repository's `.gitignore` excludes Python virtual environments, Jupyter checkpoints, and common trained-model artifacts; data should only be committed when it is permitted to share.
 
 ### Git checkpoint questions
 
