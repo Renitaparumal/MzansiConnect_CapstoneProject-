@@ -1,0 +1,6 @@
+plan_type,contract,customers,churned,churn_pct
+Hybrid,No contract,576,182,31.6
+Hybrid,12 months,336,41,12.2
+Postpaid,12 months,924,126,13.6
+Postpaid,24 months,841,91,10.8
+Prepaid,No contract,3323,821,24.7

@@ -1,0 +1,8 @@
+category,customers,churned,churn_pct,lift
+Roaming,118,36,30.5,1.45
+Billing,700,210,30.0,1.43
+Other,409,122,29.8,1.42
+Network coverage,915,271,29.6,1.41
+Contract query,230,66,28.7,1.37
+SIM/Device,358,100,27.9,1.33
+Data bundle,494,138,27.9,1.33

@@ -1,0 +1,52 @@
+digraph erd {
+    graph [rankdir=LR, fontname="Helvetica", nodesep=0.6, ranksep=1.4, pad=0.3, bgcolor="white"];
+    node  [shape=plain, fontname="Helvetica"];
+    edge  [fontname="Helvetica", fontsize=11];
+
+    customers [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+      <tr><td bgcolor="#1f4e79" colspan="2"><font color="white"><b>customers</b></font></td></tr>
+      <tr><td align="left" bgcolor="#fff2cc"><b>PK</b></td><td align="left"><b>customer_id</b> TEXT</td></tr>
+      <tr><td></td><td align="left">signup_date TEXT (ISO date)</td></tr>
+      <tr><td></td><td align="left">age INTEGER</td></tr>
+      <tr><td></td><td align="left">gender TEXT</td></tr>
+      <tr><td></td><td align="left">province TEXT</td></tr>
+      <tr><td></td><td align="left">city_type TEXT</td></tr>
+      <tr><td></td><td align="left">plan_type TEXT</td></tr>
+      <tr><td></td><td align="left">contract_months INTEGER</td></tr>
+      <tr><td></td><td align="left">device_type TEXT</td></tr>
+      <tr><td></td><td align="left">payment_method TEXT</td></tr>
+      <tr><td></td><td align="left">income_band TEXT</td></tr>
+      <tr><td></td><td align="left">referral_source TEXT</td></tr>
+      <tr><td></td><td align="left">cancellation_reason TEXT (leakage)</td></tr>
+      <tr><td></td><td align="left">churned INTEGER (0/1, target)</td></tr>
+    </table>>];
+
+    usage_monthly [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+      <tr><td bgcolor="#1f4e79" colspan="2"><font color="white"><b>usage_monthly</b></font></td></tr>
+      <tr><td align="left" bgcolor="#fff2cc"><b>PK, FK</b></td><td align="left"><b>customer_id</b> TEXT</td></tr>
+      <tr><td align="left" bgcolor="#fff2cc"><b>PK</b></td><td align="left"><b>month</b> TEXT (YYYY-MM)</td></tr>
+      <tr><td></td><td align="left">data_gb REAL</td></tr>
+      <tr><td></td><td align="left">voice_minutes REAL</td></tr>
+      <tr><td></td><td align="left">sms_count INTEGER</td></tr>
+      <tr><td></td><td align="left">revenue_zar REAL</td></tr>
+      <tr><td></td><td align="left">dropped_call_complaint INTEGER</td></tr>
+    </table>>];
+
+    support_tickets [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+      <tr><td bgcolor="#1f4e79" colspan="2"><font color="white"><b>support_tickets</b></font></td></tr>
+      <tr><td align="left" bgcolor="#fff2cc"><b>PK</b></td><td align="left"><b>ticket_id</b> TEXT</td></tr>
+      <tr><td align="left" bgcolor="#d9ead3"><b>FK</b></td><td align="left">customer_id TEXT</td></tr>
+      <tr><td></td><td align="left">created_date TEXT (ISO date)</td></tr>
+      <tr><td></td><td align="left">category TEXT</td></tr>
+      <tr><td></td><td align="left">resolution_hours REAL</td></tr>
+      <tr><td></td><td align="left">resolved INTEGER (0/1)</td></tr>
+      <tr><td></td><td align="left">satisfaction_score INTEGER (1-5)</td></tr>
+    </table>>];
+
+    // one customer to many usage rows / many tickets (crow's foot at the "many" end)
+    customers -> usage_monthly   [dir=both, arrowtail=teetee, arrowhead=crowodot, label="  up to 6 months of usage"];
+    customers -> support_tickets [dir=both, arrowtail=teetee, arrowhead=crowodot, label="  raises 0 or more"];
+}

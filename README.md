@@ -14,9 +14,10 @@ of capturing at least 50% of churners in the highest-risk 20% of customers.
 This is a target, not a measured result.
 
 The Phase 1 materials describe the data as synthetic. The schema
-[data dictionary](data_dictionary.csv) is included, but the three source CSVs
-are not. Therefore, no dataset-level findings, model scores, or cleaning
-outcomes are claimed here.
+[data dictionary](data_dictionary.csv) is included. Cleaned CSV exports are
+provided for the Phase 5 database work; the original raw CSVs are not included.
+The SQL findings are descriptive and do not establish cause or predict model
+performance.
 See [the project plan](docs/project_plan.md), [the governance note](docs/data_governance_note.md),
 and [the data quality checklist](docs/data_quality_checklist.md).
 
@@ -31,10 +32,11 @@ The data dictionary describes the following project-provided CSV tables for
 | `usage_monthly.csv` | Monthly data, voice, SMS, revenue, and dropped-call complaint fields. |
 | `support_tickets.csv` | Ticket identifiers, category, resolution, and post-resolution satisfaction fields. |
 
-See the dictionary for all fields and definitions. Source-system provenance and
-actual values still require confirmation with the data owner. Keep authorized
-raw files in `data/raw/`, preserve them unchanged, and do not commit personal
-or otherwise restricted data.
+The cleaned exports used by Phase 5 are in `data/processed/`. See the dictionary
+for field definitions. The original source-system provenance still requires
+confirmation with the data owner. Keep authorized raw files in `data/raw/`,
+preserve them unchanged, and do not commit personal or otherwise restricted
+data.
 
 ## Repository structure
 
@@ -44,17 +46,32 @@ or otherwise restricted data.
 ├── data_dictionary.csv
 ├── data/
 │   ├── processed/
+│   │   ├── customers_clean.csv
+│   │   ├── usage_clean.csv
+│   │   ├── tickets_clean.csv
+│   │   └── mzansiconnect.db
 │   └── raw/
 ├── docs/
 │   ├── data_governance_note.md
 │   ├── data_quality_checklist.md
+│   ├── erd.png
+│   ├── erd.dot
+│   ├── sql_findings.md
 │   └── project_plan.md
 ├── src/
 │   ├── data_loading.py
+│   ├── build_database.py
+│   ├── make_erd.py
+│   ├── run_queries.py
 │   └── utils.py
+├── sql/
+│   ├── schema.sql
+│   └── queries.sql
 ├── tests/
 │   ├── test_data_loading.py
+│   ├── test_database.py
 │   └── test_utils.py
+├── reports/query_results/
 ├── phase2_data_loading.py
 ├── phase2_utils.py
 ├── test_phase2_utils.py
@@ -80,9 +97,8 @@ python -m pytest -v
 ```
 
 On Windows, activate the environment with `.venv\Scripts\activate`. Dependency
-versions are pinned in [requirements.txt](requirements.txt). The current test
-suite result is **25 passed**; GitHub Actions also runs the test suite on pushes
-and pull requests.
+versions are pinned in [requirements.txt](requirements.txt). GitHub Actions
+also runs the test suite on pushes and pull requests.
 
 ## Data preparation and quality decisions
 
@@ -91,8 +107,8 @@ text fields, flagging IQR outliers, removing duplicates, and dropping rows
 missing required values. They return results without changing the caller's
 input, and log relevant row counts. Decisions such as imputation, sentinel
 interpretation, duplicate removal, or exclusions must be based on inspection
-of the actual data and documented before use. Since the CSVs are absent, this
-repository does not claim that a cleaning pass has been completed.
+of the actual data and documented before use. Phase 5 uses the supplied cleaned
+exports; raw CSVs and a reproducible Phase 4 cleaning run are not included.
 
 The Phase 1 checklist covers completeness, validity, consistency, uniqueness,
 timeliness, and accuracy. Its field inventory classifies all 28 columns in the
@@ -118,11 +134,32 @@ as work is assigned. Project work areas are:
 
 ## Current status and evidence
 
-Phase 1 planning, governance, and quality documentation and Phase 2 Python
-utilities/tests are present. The data dictionary is checked in, but the raw
-CSV datasets and reported analytical findings are not. Conclusions and
-retention recommendations therefore remain pending actual data analysis and
-model validation.
+Phase 1 planning, governance, and quality documentation; Phase 2 Python
+utilities/tests; and Phase 5 database assets are present. The raw CSV datasets
+are not included. The SQL results are available in
+[docs/sql_findings.md](docs/sql_findings.md); model evaluation and retention
+recommendations remain out of scope.
+
+## Phase 5: database and SQL
+
+The database schema defines `customers`, `usage_monthly`, and `support_tickets`
+with primary/foreign keys and indexes. The ERD is available as
+[docs/erd.png](docs/erd.png), with editable Graphviz source in
+[docs/erd.dot](docs/erd.dot). The twelve business questions and the
+join-multiplication demonstration are in [sql/queries.sql](sql/queries.sql).
+
+Rebuild the database from the cleaned exports and execute the queries:
+
+```bash
+python -m src.build_database
+python -m src.run_queries
+```
+
+The query runner uses `sqlite3` and pandas, loads results into DataFrames, and
+writes CSV results under `reports/query_results/`. The database is
+`data/processed/mzansiconnect.db`. See the SQL findings for the Phase 5
+checkpoint answers, including why joining both child tables before aggregation
+inflates revenue and the storage/write costs of indexes.
 
 ## Git workflow
 

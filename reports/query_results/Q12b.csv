@@ -1,0 +1,11 @@
+customer_id,province,plan_type,ticket_count,total_revenue_zar,churned
+CUST03647,KwaZulu-Natal,Postpaid,1,4042.33,0
+CUST02274,Gauteng,Hybrid,0,3953.16,0
+CUST05325,North West,Hybrid,1,3877.64,0
+CUST05249,Limpopo,Postpaid,0,3865.57,0
+CUST01141,KwaZulu-Natal,Hybrid,0,3861.78,0
+CUST02136,KwaZulu-Natal,Postpaid,0,3860.3,0
+CUST02577,KwaZulu-Natal,Postpaid,1,3856.91,0
+CUST03976,KwaZulu-Natal,Hybrid,0,3841.42,1
+CUST03591,Western Cape,Postpaid,0,3824.46,0
+CUST03263,Gauteng,Postpaid,0,3804.49,0

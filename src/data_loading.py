@@ -6,6 +6,10 @@ from pathlib import Path
 import pandas as pd
 
 logger = logging.getLogger(__name__)
+ROOT = Path(__file__).resolve().parents[1]
+RAW_DIR = ROOT / "data" / "raw"
+PROCESSED_DIR = ROOT / "data" / "processed"
+DB_PATH = PROCESSED_DIR / "mzansiconnect.db"
 DEFAULT_RAW_DATA_DIR = Path("data/raw")
 
 
@@ -30,3 +34,12 @@ def load_usage_monthly(data_dir: Path = DEFAULT_RAW_DATA_DIR) -> pd.DataFrame:
 def load_support_tickets(data_dir: Path = DEFAULT_RAW_DATA_DIR) -> pd.DataFrame:
     """Load support interactions from ``support_tickets.csv``."""
     return _load_csv("support_tickets.csv", data_dir)
+
+
+def load_processed() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Load cleaned customer, monthly usage, and ticket data."""
+    return (
+        _load_csv("customers_clean.csv", PROCESSED_DIR),
+        _load_csv("usage_clean.csv", PROCESSED_DIR),
+        _load_csv("tickets_clean.csv", PROCESSED_DIR),
+    )

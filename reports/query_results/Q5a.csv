@@ -1,0 +1,3 @@
+ticket_group,customers,churned,churn_pct
+More than 3 tickets,52,28,53.8
+3 tickets or fewer,5948,1233,20.7
